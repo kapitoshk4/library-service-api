@@ -1,3 +1,24 @@
 from django.db import models
+from django.db.models import UniqueConstraint
+from django.utils import timezone
+from books.models import Book
+from users.models import User
 
-# Create your models here.
+
+class Borrowing(models.Model):
+    borrow_date = models.DateTimeField(default=timezone.now)
+    expected_return_date = models.DateTimeField()
+    actual_return_date = models.DateTimeField(null=True, blank=True)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["borrow_date", "expected_return_date", "actual_return_date"],
+                name="unique_borrowing_dates"
+            )
+        ]
+
+    def __str__(self):
+        return f"Borrowing by {self.user} for {self.book} on {self.borrow_date}"
