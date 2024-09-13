@@ -1,7 +1,0 @@
-venv
-.DS_Store
-**__pycache__
-.idea
-db.sqlite3
-.env
-data
