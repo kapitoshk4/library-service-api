@@ -1,8 +1,6 @@
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils import timezone
-from rest_framework.exceptions import ValidationError
-
 from books.models import Book
 from users.models import User
 
@@ -21,20 +19,6 @@ class Borrowing(models.Model):
                 name="unique_borrowing_dates"
             )
         ]
-
-    @staticmethod
-    def validate_borrowing(inventory: int):
-        if inventory == 0:
-            raise ValidationError(
-                {
-                    "inventory": f"The book is currently out of stock."
-                }
-            )
-
-    def clean(self):
-        Borrowing.validate_borrowing(
-            self.book.inventory
-        )
 
     def __str__(self):
         return f"Borrowing by {self.user} for {self.book} on {self.borrow_date}"

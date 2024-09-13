@@ -1,5 +1,4 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
+from rest_framework import viewsets
 
 from borrowings.models import Borrowing
 from borrowings.serializers import BorrowingSerializer, BorrowingListSerializer, BorrowingRetrieveSerializer
@@ -17,9 +16,3 @@ class BorrowingViewSet(viewsets.ModelViewSet):
             serializer_class = BorrowingRetrieveSerializer
 
         return serializer_class
-
-    def get_queryset(self):
-        queryset = self.queryset
-        queryset = queryset.select_related("user", "book")
-
-        return queryset
