@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from borrowings.models import Borrowing
 from books.serializer import BookSerializer
-from borrowings.telegram_helper import send_telegram_message
+from borrowings.telegram_helper import send_borrowing_notification
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
@@ -26,20 +26,9 @@ class BorrowingSerializer(serializers.ModelSerializer):
             book=book,
             expected_return_date=validated_data["expected_return_date"]
         )
-        self.send_borrowing_notification(borrowing)
+        send_borrowing_notification(borrowing=borrowing)
 
         return borrowing
-
-    def send_borrowing_notification(self, borrowing):
-        message = (
-            f"📚 New Borrowing Created:\n"
-            f"User: {borrowing.user.full_name}\n"
-            f"Book: {borrowing.book.title}\n"
-            f"Borrow Date: {borrowing.borrow_date}\n"
-            f"Expected Return Date: {borrowing.expected_return_date}"
-            f"Actual Return Date: {borrowing.actual_return_date}"
-        )
-        send_telegram_message(message)
 
 
 class BorrowingListSerializer(serializers.ModelSerializer):
