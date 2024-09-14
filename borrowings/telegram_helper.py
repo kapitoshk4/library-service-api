@@ -1,6 +1,9 @@
+import datetime
 import os
 import requests
 from dotenv import load_dotenv
+
+from borrowings.models import Borrowing
 
 load_dotenv()
 
@@ -21,3 +24,17 @@ def send_telegram_message(message: str):
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
         print(f"Failed to send message: {e}")
+
+
+def send_borrowing_notification(borrowing: Borrowing):
+    message = (
+        f"📚 New Borrowing Created:\n"
+        f"User: {borrowing.user.full_name}\n"
+        f"Book: {borrowing.book.title}\n"
+        f"Borrow Date: {borrowing.borrow_date}\n"
+        f"Expected Return Date: {borrowing.expected_return_date}"
+        f"Actual Return Date: {borrowing.actual_return_date}"
+    )
+    send_telegram_message(message)
+
+
