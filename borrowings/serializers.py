@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from borrowings.models import Borrowing
-from books.serializer import BookSerializer
+from books.serializers import BookSerializer
 from borrowings.telegram_helper import send_borrowing_notification
 
 
