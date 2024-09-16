@@ -3,6 +3,7 @@ from rest_framework import serializers
 from borrowings.models import Borrowing
 from books.serializers import BookSerializer
 from borrowings.telegram_helper import send_borrowing_notification
+from payments.serializers import PaymentSerializer
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
@@ -43,7 +44,14 @@ class BorrowingListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Borrowing
-        fields = ("id", "borrow_date", "expected_return_date", "actual_return_date", "book", "user",)
+        fields = (
+            "id",
+            "borrow_date",
+            "expected_return_date",
+            "actual_return_date",
+            "book",
+            "user"
+        )
 
 
 class BorrowingRetrieveSerializer(BorrowingSerializer):
@@ -52,7 +60,16 @@ class BorrowingRetrieveSerializer(BorrowingSerializer):
         source="user.full_name",
         read_only=True
     )
+    payments = PaymentSerializer(read_only=True, many=True)
 
     class Meta:
         model = Borrowing
-        fields = ("id", "borrow_date", "expected_return_date", "actual_return_date", "book", "user",)
+        fields = (
+            "id",
+            "borrow_date",
+            "expected_return_date",
+            "actual_return_date",
+            "book",
+            "user",
+            "payments",
+        )
