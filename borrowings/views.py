@@ -32,7 +32,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         queryset = self.queryset
         is_active = self.request.query_params.get("is_active")
         users = self.request.query_params.get("users")
-        queryset = queryset.select_related("user", "book")
+        queryset = queryset.select_related("user", "book").prefetch_related("payments")
 
         if is_active:
             if is_active.lower() == "true":
