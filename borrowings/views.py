@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from borrowings.models import Borrowing
 from borrowings.serializers import BorrowingSerializer, BorrowingListSerializer, BorrowingRetrieveSerializer
+from payments.utils import create_stripe_payment_session
 
 
 class BorrowingViewSet(viewsets.ModelViewSet):
@@ -49,7 +50,8 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        borrowing = serializer.save(user=self.request.user)
+        create_stripe_payment_session(borrowing)
 
     @action(detail=True, methods=["POST"], url_path="return")
     def return_borrowing(self, request, pk=None):
