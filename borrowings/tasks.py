@@ -1,7 +1,9 @@
+import stripe
 from celery import shared_task
 from django.utils import timezone
 from borrowings.models import Borrowing
 from borrowings.telegram_helper import send_telegram_message
+from payments.models import Payment
 
 
 @shared_task
@@ -23,3 +25,15 @@ def check_overdue_borrowings():
             send_telegram_message(message)
     else:
         send_telegram_message("🚫 No borrowings overdue today!")
+
+
+@shared_task
+def check_expired_sessions():
+    now = timezone.now()
+    pending_payments = Payment.objects.filter(status="Pending")
+    for payment in pending_payments:
+        session = stripe.checkout.Session.retrieve(payment.session_id)
+        if session["status"] == "expired" or session["expires_at"] < now.timestamp():
+            payment.status = "Expired"
+            payment.save()
+    

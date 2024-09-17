@@ -51,7 +51,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         borrowing = serializer.save(user=self.request.user)
-        create_stripe_payment_session(borrowing)
+        create_stripe_payment_session(borrowing, self.request)
 
     @action(detail=True, methods=["POST"], url_path="return")
     def return_borrowing(self, request, pk=None):
