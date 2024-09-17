@@ -3,6 +3,7 @@ import requests
 from dotenv import load_dotenv
 
 from borrowings.models import Borrowing
+from payments.models import Payment
 
 load_dotenv()
 
@@ -37,3 +38,12 @@ def send_borrowing_notification(borrowing: Borrowing):
     send_telegram_message(message)
 
 
+def payment_is_paid_notification(payment: Payment):
+    message = (
+        f"Payment by {payment.borrowing.user.full_name} is paid!\n"
+        f"Book: {payment.borrowing.book.title}\n"
+        f"Borrow Date: {payment.borrowing.borrow_date}\n"
+        f"Expected Return Date: {payment.borrowing.expected_return_date}"
+        f"Actual Return Date: {payment.borrowing.actual_return_date}"
+    )
+    send_telegram_message(message)
