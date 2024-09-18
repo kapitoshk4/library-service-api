@@ -13,7 +13,6 @@ from payments.utils import create_stripe_payment_session
 class BorrowingViewSet(viewsets.ModelViewSet):
     queryset = Borrowing.objects.all()
     serializer_class = BorrowingSerializer
-    permission_classes = (IsAuthenticated,)
 
     @staticmethod
     def _params_to_int(query_string):
@@ -51,7 +50,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         borrowing = serializer.save(user=self.request.user)
-        create_stripe_payment_session(borrowing, self.request)
+        create_stripe_payment_session(borrowing, self.request, total_price=borrowing.total_price)
 
     @action(detail=True, methods=["POST"], url_path="return")
     def return_borrowing(self, request, pk=None):
