@@ -9,12 +9,7 @@ from payments.models import Payment
 stripe.api_key = settings.STRIPE_API_KEY
 
 
-def create_stripe_payment_session(borrowing, current_request):
-    borrow_duration = (
-            borrowing.expected_return_date - borrowing.borrow_date
-    ).days
-    daily_fee = borrowing.book.daily_fee
-    total_price = borrow_duration * daily_fee
+def create_stripe_payment_session(borrowing, current_request, payment_type: str = "Payment", total_price: float = 0.0):
     success_url = current_request.build_absolute_uri(
         reverse("payments:payment-success")
     ) + "?session_id={CHECKOUT_SESSION_ID}"
@@ -44,6 +39,6 @@ def create_stripe_payment_session(borrowing, current_request):
         borrowing=borrowing,
         session_id=session.id,
         session_url=session.url,
-        type="Payment",
+        type=payment_type,
         money_to_pay=total_price
     )
