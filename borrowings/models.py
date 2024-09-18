@@ -5,7 +5,6 @@ from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
 from books.models import Book
-from users.models import User
 
 
 class Borrowing(models.Model):
@@ -36,6 +35,10 @@ class Borrowing(models.Model):
         Borrowing.validate_borrowing(
             self.book.inventory
         )
+
+    @property
+    def total_price(self):
+        return (self.expected_return_date - self.borrow_date).days * self.book.daily_fee
 
     def __str__(self):
         return f"Borrowing by {self.user} for {self.book} on {self.borrow_date}"
