@@ -14,7 +14,6 @@ from payments.utils import create_stripe_payment_session
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         queryset = self.queryset
@@ -63,7 +62,7 @@ def payment_renew(request):
         borrowing = payment.borrowing
         payment.delete()
 
-        create_stripe_payment_session(borrowing, request)
+        create_stripe_payment_session(borrowing, request, total_price=borrowing.total_price)
 
         return HttpResponse("Payment session has been renewed successfully.")
 
