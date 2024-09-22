@@ -21,6 +21,7 @@ class Borrowing(models.Model):
                 name="unique_borrowing_dates"
             )
         ]
+        ordering = ["id"]
 
     @staticmethod
     def validate_borrowing(inventory: int):
