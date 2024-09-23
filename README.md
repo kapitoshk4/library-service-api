@@ -10,12 +10,9 @@ git clone https://github.com/kapitoshk4/library-service-api.git
 cd train_station
 python -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
-set POSTGRES_USER=<your db username>
-set POSTGRES_PASSWORD=<your db password>
-set POSTGRES_DB=<your db name>
-set POSTGRES_HOST=<your db hostname>
-set SECRET_KEY=<your secret key>
+```
+Copy .env.sample -> .env and populate with all required data
+```bash
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
