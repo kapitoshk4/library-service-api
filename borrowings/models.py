@@ -11,8 +11,8 @@ class Borrowing(models.Model):
     borrow_date = models.DateTimeField(default=timezone.now)
     expected_return_date = models.DateTimeField()
     actual_return_date = models.DateTimeField(null=True, blank=True)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="borrowings")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="borrowings")
 
     class Meta:
         constraints = [
