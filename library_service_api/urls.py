@@ -26,10 +26,10 @@ from drf_spectacular.views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v1/library/", include("books.urls"), name="books"),
+    path("api/v1/books/", include("books.urls"), name="books"),
     path("api/v1/user/", include("users.urls"), name="users"),
-    path("api/v1/borrowing/", include("borrowings.urls"), name="borrowings"),
-    path("api/v1/payment/", include("payments.urls"), name="payments"),
+    path("api/v1/borrowings/", include("borrowings.urls"), name="borrowings"),
+    path("api/v1/payments/", include("payments.urls"), name="payments"),
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "api/v1/doc/swagger/",
