@@ -11,11 +11,10 @@ from payments.views import (
 router = routers.DefaultRouter()
 router.register("", PaymentViewSet)
 
-urlpatterns = [
-    path("", include(router.urls)),
+urlpatterns = router.urls + [
     path("success/", payment_success, name="payment-success"),
     path("cancel/", payment_cancel, name="payment-cancel"),
-    path("renew-payment/", payment_renew, name="payment-renew")
+    path("renew-payment/", payment_renew, name="payment-renew"),
 ]
 
 
